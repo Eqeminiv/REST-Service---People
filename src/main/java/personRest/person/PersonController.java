@@ -14,26 +14,29 @@ public class PersonController {
     final String ticket = "e550d817-534c-4140-bb76-4395f83cac08";
     uuid temp;
 
-    @Autowired
-    private PersonService personService;
+
+ //   @Autowired
+    private PersonService personService = new PersonService();
+
 
     @RequestMapping("/login")
-    public uuid getUUID()
+    public uuid getUUID(@RequestParam String username, @RequestBody String password)
     {
-        temp = new uuid();
-
-        return temp;
-        //System.out.println(temp.getDate().getTime());
-       // System.out.println(temp.getHash().toString());
-
+        Person p = personService.checkLogin(username, password);
+        if(p != null){
+            p.updateUUID();
+            System.out.println(p.getUUID().getHash());
+            return p.getUUID();
+        }
+        return null;
     }
 
     @RequestMapping("/{userId}/getperson")
     public Person getPerson(@PathVariable("userId") int user, @RequestBody uuid uuid)
     {
-        System.out.println(System.currentTimeMillis()+" - "+uuid.getDate().getTime()+" = "+(System.currentTimeMillis() - uuid.getDate().getTime()));
+        //System.out.println(System.currentTimeMillis()+" - "+uuid.getDate().getTime()+" = "+(System.currentTimeMillis() - uuid.getDate().getTime()));
         if(System.currentTimeMillis() - uuid.getDate().getTime() < 60000 &&
-                uuid.getHash().toString().equals(temp.getHash().toString()))
+                personService.checkUUID(uuid))
         {
             //uuid.setDate(new Timestamp(System.currentTimeMillis()));
             return personService.getPerson(user);
