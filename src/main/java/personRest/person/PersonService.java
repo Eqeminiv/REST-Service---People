@@ -23,7 +23,7 @@ public class PersonService {
     {
         for (Person p : personList)
         {
-            if (p.getUUID().getHash().equals(UUID.getHash()));
+            if (p.getUUID().getHash().equals(UUID.getHash()))
             return true;
         }
             return false;
